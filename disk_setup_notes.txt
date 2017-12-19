@@ -1,0 +1,29 @@
+# Original set up of Rasbian Jessie - 11/16/2016
+#https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
+Df -h # before you insert card
+Df -h # after you insert card 
+sudo diskutil unmount /dev/disk2s1
+#spin up vagrant vm since MacOS can’t do this (?)
+unzip 2016-09-23-raspbian-jessie.zip
+sudo dd bs=1m if=./2016-09-23-raspbian-jessie.img of=/dev/rdisk2
+
+# Setup of Kali Linix
+#7/6/2017
+dreamer2:Downloads james$ shasum -a 256 kali-2017.01-rpi2.img.xz 
+4976c446802ee16252954453dc577e2001698492e52dde47b27b8548c018a686  kali-2017.01-rpi2.img.xz
+
+ssh-keygen -t rsa
+
+xz -d kali-2017.01-rpi2.img.xz
+
+sudo diskutil umount /dev/disk2s1
+
+sudo dd if=kali-2017.01-rpi2.img of=/dev/disk2s1 bs=512k
+
+# repeated failures - taking a backup of my other disk image
+sudo dd if=/dev/disk2s1 | gzip > ~/Downloads/jessie_backup.img.gz
+
+#to restore: 
+cat ~/Downloads/jessie_backup.img.gz | gunzip | sudo dd of=/dev/disk2s1
+
+#restore failed - only restored boot partition
